@@ -1,43 +1,58 @@
-import { QMainWindow, QWidget, QLabel, FlexLayout, QPushButton, QIcon } from '@nodegui/nodegui';
-import logo from '../assets/logox200.png';
+import { QMainWindow, QWidget, QLabel, FlexLayout, QPushButton, QLineEdit } from '@nodegui/nodegui';
 
 const win = new QMainWindow();
-win.setWindowTitle("Hello World");
+win.setWindowTitle("ToDo List");
 
 const centralWidget = new QWidget();
 centralWidget.setObjectName("myroot");
+centralWidget.setMinimumSize(400, 600);
 const rootLayout = new FlexLayout();
 centralWidget.setLayout(rootLayout);
 
 const label = new QLabel();
 label.setObjectName("mylabel");
-label.setText("Hello");
+label.setText("ToDos");
+
+const input = new QLineEdit()
 
 const button = new QPushButton();
-button.setIcon(new QIcon(logo));
-
-const label2 = new QLabel();
-label2.setText("World");
-label2.setInlineStyle(`
-  color: red;
-`);
+button.setText("Add")
+button.setInlineStyle("color: black; margin-top: 10px;")
+button.addEventListener('clicked',()=> {
+  const newLabel = new QPushButton();
+  newLabel.setText(input.text());
+  newLabel.setObjectName("todo")
+  newLabel.addEventListener('clicked', () => {
+    rootLayout.removeWidget(newLabel);
+  })
+  rootLayout.addWidget(newLabel)
+  input.clear();
+});
 
 rootLayout.addWidget(label);
+rootLayout.addWidget(input);
 rootLayout.addWidget(button);
-rootLayout.addWidget(label2);
 win.setCentralWidget(centralWidget);
 win.setStyleSheet(
   `
     #myroot {
-      background-color: #009688;
+      background-color: #fff;
       height: '100%';
       align-items: 'center';
-      justify-content: 'center';
+      color: black;
     }
     #mylabel {
       font-size: 16px;
       font-weight: bold;
       padding: 1;
+      color: black;
+    }
+    #todo {
+      border: 1px solid gray;
+      border-radius: 3px;
+      background-color: transparent;
+      width: 100%;
+      color: black;
     }
   `
 );
